@@ -3,23 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>全息时钟 - Holographic Clock</title>
+  <title>全息投影 - Holographic Display</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="hologram-container">
-    <div class="clock-wrapper">
-      <div class="clock">
-        <div class="time">
-          <span id="hours">00</span><span class="colon">:</span><span id="minutes">00</span><span class="colon">:</span><span class="seconds"><span class="sec-digit" id="sec-tens">0</span><span class="sec-digit" id="sec-ones">0</span></span>
+    <div class="hologram-wrapper">
+      <!-- 场景1: 时钟 -->
+      <div class="scene scene-clock active" id="scene-clock">
+        <div class="clock">
+          <div class="time">
+            <span id="hours">00</span><span class="colon">:</span><span id="minutes">00</span><span class="colon">:</span><span class="seconds"><span class="sec-digit" id="sec-tens">0</span><span class="sec-digit" id="sec-ones">0</span></span>
+          </div>
+          <div class="date" id="date">2024年1月1日 星期一</div>
         </div>
-        <div class="date" id="date">2024年1月1日 星期一</div>
+        <div class="glow"></div>
       </div>
-      <!-- 发光效果 -->
-      <div class="glow"></div>
+
+      <!-- 场景2: 3D心形 -->
+      <div class="scene scene-heart" id="scene-heart">
+        <div class="heart-container">
+          <div class="heart">
+            <div class="heart-piece"></div>
+            <div class="heart-piece"></div>
+            <div class="heart-piece"></div>
+            <div class="heart-piece"></div>
+            <div class="heart-piece"></div>
+            <div class="heart-piece"></div>
+            <div class="heart-piece"></div>
+            <div class="heart-piece"></div>
+            <div class="heart-piece"></div>
+          </div>
+        </div>
+        <div class="glow glow-pink"></div>
+      </div>
+
+      <!-- 场景3: 烟花 -->
+      <div class="scene scene-firework" id="scene-firework">
+        <canvas id="firework-canvas"></canvas>
+      </div>
     </div>
   </div>
-  
+
+  <!-- 底部切换按钮 -->
+  <div class="controls" id="controls">
+    <button class="control-btn active" data-scene="clock">🕐</button>
+    <button class="control-btn" data-scene="heart">💖</button>
+    <button class="control-btn" data-scene="firework">🎆</button>
+  </div>
+
+  <!-- 点击区域显示/隐藏控制按钮 -->
+  <div class="toggle-area" id="toggle-area"></div>
+
   <script src="script.js"></script>
 </body>
 </html>

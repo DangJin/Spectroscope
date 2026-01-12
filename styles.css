@@ -22,7 +22,7 @@ body {
   height: 100vh;
 }
 
-.clock-wrapper {
+.hologram-wrapper {
   position: relative;
   /* 垂直翻转 - 适配分光镜反射 */
   transform: scaleY(-1);
@@ -36,8 +36,8 @@ body {
   align-items: center;
 }
 
-/* 可选：显示分光镜对齐框 */
-.clock-wrapper::before {
+/* 对齐框 */
+.hologram-wrapper::before {
   content: '';
   position: absolute;
   width: 100%;
@@ -45,8 +45,67 @@ body {
   border: 1px solid rgba(0, 255, 255, 0.15);
   border-radius: 4px;
   pointer-events: none;
+  z-index: 10;
 }
 
+/* ==================== 场景通用 ==================== */
+.scene {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.scene.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 发光效果 */
+.glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(
+    circle,
+    rgba(0, 255, 255, 0.12) 0%,
+    rgba(0, 255, 255, 0.04) 50%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.glow-pink {
+  background: radial-gradient(
+    circle,
+    rgba(255, 100, 150, 0.2) 0%,
+    rgba(255, 100, 150, 0.05) 50%,
+    transparent 70%
+  );
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0.6;
+  }
+}
+
+/* ==================== 场景1: 时钟 ==================== */
 .clock {
   text-align: center;
   padding: 8px;
@@ -71,12 +130,10 @@ body {
   opacity: 0.8;
 }
 
-/* 秒数容器 */
 .seconds {
   display: inline;
 }
 
-/* 秒数数字 - 翻牌动画 */
 .sec-digit {
   display: inline-block;
   min-width: 0.6em;
@@ -114,37 +171,137 @@ body {
     0 0 6px #00ffff;
 }
 
-/* 发光背景效果 */
-.glow {
+/* ==================== 场景2: 3D心形 ==================== */
+.heart-container {
+  width: 60px;
+  height: 60px;
+  perspective: 500px;
+}
+
+.heart {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: rotateHeart 4s linear infinite;
+}
+
+@keyframes rotateHeart {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+
+.heart-piece {
   position: absolute;
-  top: 50%;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+/* 创建心形的多个切片 */
+.heart-piece::before {
+  content: '❤';
+  position: absolute;
+  font-size: 50px;
+  color: #ff4d6d;
+  text-shadow: 
+    0 0 10px #ff4d6d,
+    0 0 20px #ff4d6d,
+    0 0 30px #ff6b88,
+    0 0 40px #ff6b88;
   left: 50%;
+  top: 50%;
   transform: translate(-50%, -50%);
-  width: 120px;
-  height: 120px;
-  background: radial-gradient(
-    circle,
-    rgba(0, 255, 255, 0.12) 0%,
-    rgba(0, 255, 255, 0.04) 50%,
-    transparent 70%
-  );
+  filter: drop-shadow(0 0 8px #ff4d6d);
+}
+
+.heart-piece:nth-child(1) { transform: rotateY(0deg) translateZ(2px); opacity: 1; }
+.heart-piece:nth-child(2) { transform: rotateY(40deg) translateZ(2px); opacity: 0.9; }
+.heart-piece:nth-child(3) { transform: rotateY(80deg) translateZ(2px); opacity: 0.8; }
+.heart-piece:nth-child(4) { transform: rotateY(120deg) translateZ(2px); opacity: 0.7; }
+.heart-piece:nth-child(5) { transform: rotateY(160deg) translateZ(2px); opacity: 0.6; }
+.heart-piece:nth-child(6) { transform: rotateY(200deg) translateZ(2px); opacity: 0.5; }
+.heart-piece:nth-child(7) { transform: rotateY(240deg) translateZ(2px); opacity: 0.4; }
+.heart-piece:nth-child(8) { transform: rotateY(280deg) translateZ(2px); opacity: 0.3; }
+.heart-piece:nth-child(9) { transform: rotateY(320deg) translateZ(2px); opacity: 0.2; }
+
+/* 心跳效果 */
+.heart-container {
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.15); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.1); }
+  60% { transform: scale(1); }
+}
+
+/* ==================== 场景3: 烟花 ==================== */
+#firework-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* ==================== 控制按钮 ==================== */
+.controls {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 30px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1000;
+}
+
+.controls.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.control-btn {
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: rgba(0, 255, 255, 0.1);
   border-radius: 50%;
-  pointer-events: none;
-  animation: pulse 4s ease-in-out infinite;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-@keyframes pulse {
-  0%, 100% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.2);
-    opacity: 0.6;
-  }
+.control-btn:hover {
+  background: rgba(0, 255, 255, 0.2);
+  transform: scale(1.1);
 }
 
-/* 扫描线效果 - 增加科技感 */
+.control-btn.active {
+  background: rgba(0, 255, 255, 0.3);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+}
+
+/* 点击区域 */
+.toggle-area {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  z-index: 999;
+}
+
+/* ==================== 扫描线效果 ==================== */
 .hologram-container::before {
   content: '';
   position: fixed;
@@ -163,40 +320,34 @@ body {
   z-index: 100;
 }
 
-/* 闪烁动画 - 模拟全息效果 */
-@keyframes flicker {
-  0%, 100% { opacity: 1; }
-  92% { opacity: 1; }
-  93% { opacity: 0.8; }
-  94% { opacity: 1; }
-  95% { opacity: 0.9; }
-  96% { opacity: 1; }
-}
-
-.clock {
-  animation: flicker 8s infinite;
-}
-
-/* iPhone 12 及类似设备优化 */
+/* ==================== 响应式 ==================== */
 @media (max-width: 430px) {
-  .clock-wrapper {
+  .hologram-wrapper {
     width: 35vw;
     height: 35vw;
   }
   
   .time {
     font-size: 24px;
-    letter-spacing: 1px;
   }
   
   .date {
     font-size: 7px;
-    letter-spacing: 0.5px;
   }
   
-  .glow {
-    width: 100px;
-    height: 100px;
+  .heart-container {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .heart-piece::before {
+    font-size: 42px;
+  }
+  
+  .control-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
   }
 }
 
