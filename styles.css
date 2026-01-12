@@ -57,7 +57,6 @@ body {
 .time {
   font-size: 28px;
   font-weight: 300;
-  letter-spacing: 2px;
   color: #00ffff;
   text-shadow: 
     0 0 5px #00ffff,
@@ -65,6 +64,43 @@ body {
     0 0 20px #00ffff,
     0 0 40px #0088ff;
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.colon {
+  opacity: 0.8;
+}
+
+/* 秒数容器 */
+.seconds {
+  display: inline;
+}
+
+/* 秒数数字 - 翻牌动画 */
+.sec-digit {
+  display: inline-block;
+  min-width: 0.6em;
+  text-align: center;
+  transition: transform 0.15s ease-out, opacity 0.15s ease-out;
+}
+
+.sec-digit.flip {
+  animation: flipDown 0.3s ease-out;
+}
+
+@keyframes flipDown {
+  0% {
+    transform: scaleY(0.3) translateY(-50%);
+    opacity: 0;
+  }
+  50% {
+    transform: scaleY(1.1) translateY(5%);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scaleY(1) translateY(0);
+    opacity: 1;
+  }
 }
 
 .date {

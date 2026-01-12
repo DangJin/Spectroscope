@@ -6,6 +6,19 @@ function padZero(num) {
   return num.toString().padStart(2, '0');
 }
 
+// 上一次的秒数值
+let lastSecTens = '';
+let lastSecOnes = '';
+
+// 翻牌动画
+function flipDigit(element, newValue) {
+  element.textContent = newValue;
+  element.classList.remove('flip');
+  // 触发 reflow 以重新启动动画
+  void element.offsetWidth;
+  element.classList.add('flip');
+}
+
 // 更新时钟
 function updateClock() {
   const now = new Date();
@@ -14,7 +27,8 @@ function updateClock() {
   const hours = padZero(now.getHours());
   const minutes = padZero(now.getMinutes());
   const seconds = padZero(now.getSeconds());
-  const timeStr = `${hours}:${minutes}:${seconds}`;
+  const secTens = seconds[0];
+  const secOnes = seconds[1];
   
   // 日期
   const year = now.getFullYear();
@@ -23,8 +37,25 @@ function updateClock() {
   const weekDay = weekDays[now.getDay()];
   const dateStr = `${year}年${month}月${day}日 ${weekDay}`;
   
-  // 更新DOM
-  document.getElementById('time').textContent = timeStr;
+  // 更新时分
+  document.getElementById('hours').textContent = hours;
+  document.getElementById('minutes').textContent = minutes;
+  
+  // 更新秒数（带翻牌动画）
+  const secTensEl = document.getElementById('sec-tens');
+  const secOnesEl = document.getElementById('sec-ones');
+  
+  if (secTens !== lastSecTens) {
+    flipDigit(secTensEl, secTens);
+    lastSecTens = secTens;
+  }
+  
+  if (secOnes !== lastSecOnes) {
+    flipDigit(secOnesEl, secOnes);
+    lastSecOnes = secOnes;
+  }
+  
+  // 更新日期
   document.getElementById('date').textContent = dateStr;
 }
 
