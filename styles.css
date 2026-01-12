@@ -171,71 +171,103 @@ body {
     0 0 6px #00ffff;
 }
 
-/* ==================== 场景2: 3D心形 ==================== */
+/* ==================== 场景2: 3D气球心形 ==================== */
 .heart-container {
-  width: 60px;
-  height: 60px;
-  perspective: 500px;
-}
-
-.heart {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  animation: rotateHeart 4s linear infinite;
-}
-
-@keyframes rotateHeart {
-  0% { transform: rotateY(0deg); }
-  100% { transform: rotateY(360deg); }
-}
-
-.heart-piece {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-}
-
-/* 创建心形的多个切片 */
-.heart-piece::before {
-  content: '❤';
-  position: absolute;
-  font-size: 50px;
-  color: #ff4d6d;
-  text-shadow: 
-    0 0 10px #ff4d6d,
-    0 0 20px #ff4d6d,
-    0 0 30px #ff6b88,
-    0 0 40px #ff6b88;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  filter: drop-shadow(0 0 8px #ff4d6d);
-}
-
-.heart-piece:nth-child(1) { transform: rotateY(0deg) translateZ(2px); opacity: 1; }
-.heart-piece:nth-child(2) { transform: rotateY(40deg) translateZ(2px); opacity: 0.9; }
-.heart-piece:nth-child(3) { transform: rotateY(80deg) translateZ(2px); opacity: 0.8; }
-.heart-piece:nth-child(4) { transform: rotateY(120deg) translateZ(2px); opacity: 0.7; }
-.heart-piece:nth-child(5) { transform: rotateY(160deg) translateZ(2px); opacity: 0.6; }
-.heart-piece:nth-child(6) { transform: rotateY(200deg) translateZ(2px); opacity: 0.5; }
-.heart-piece:nth-child(7) { transform: rotateY(240deg) translateZ(2px); opacity: 0.4; }
-.heart-piece:nth-child(8) { transform: rotateY(280deg) translateZ(2px); opacity: 0.3; }
-.heart-piece:nth-child(9) { transform: rotateY(320deg) translateZ(2px); opacity: 0.2; }
-
-/* 心跳效果 */
-.heart-container {
-  animation: heartbeat 1.5s ease-in-out infinite;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: heartbeat 1.2s ease-in-out infinite;
 }
 
 @keyframes heartbeat {
   0%, 100% { transform: scale(1); }
-  15% { transform: scale(1.15); }
-  30% { transform: scale(1); }
-  45% { transform: scale(1.1); }
-  60% { transform: scale(1); }
+  10% { transform: scale(1.15); }
+  20% { transform: scale(1); }
+  30% { transform: scale(1.1); }
+  40% { transform: scale(1); }
+}
+
+.balloon-heart {
+  position: relative;
+  width: 55px;
+  height: 50px;
+  animation: floatHeart 2.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 15px rgba(255, 77, 109, 0.8))
+          drop-shadow(0 0 30px rgba(255, 77, 109, 0.5));
+}
+
+@keyframes floatHeart {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-6px) rotate(2deg); }
+}
+
+/* 心形主体 - 气球质感 */
+.heart-shape {
+  position: absolute;
+  width: 55px;
+  height: 50px;
+  left: 0;
+  top: 0;
+}
+
+.heart-shape::before,
+.heart-shape::after {
+  content: '';
+  position: absolute;
+  width: 28px;
+  height: 44px;
+  background: 
+    radial-gradient(ellipse at 25% 25%, rgba(255, 255, 255, 0.5) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 70%, rgba(150, 0, 50, 0.4) 0%, transparent 50%),
+    linear-gradient(135deg, #ff6b88 0%, #ff4d6d 30%, #e91e63 60%, #c2185b 100%);
+  border-radius: 28px 28px 0 0;
+}
+
+.heart-shape::before {
+  left: 28px;
+  transform: rotate(-45deg);
+  transform-origin: 0 100%;
+}
+
+.heart-shape::after {
+  left: 0;
+  transform: rotate(45deg);
+  transform-origin: 100% 100%;
+}
+
+/* 气球高光 - 左上角 */
+.heart-shine {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.6) 30%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  top: 6px;
+  left: 10px;
+  z-index: 10;
+}
+
+/* 第二个高光点 */
+.heart-shine::after {
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.8) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  top: 14px;
+  left: 4px;
 }
 
 /* ==================== 场景3: 烟花 ==================== */
