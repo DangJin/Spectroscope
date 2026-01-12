@@ -1,0 +1,171 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #000;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.hologram-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+}
+
+.clock-wrapper {
+  position: relative;
+  /* 垂直翻转 - 适配分光镜反射 */
+  transform: scaleY(-1);
+  /* 限制在 2.5cm 区域内 - iPhone 12 约 35vw */
+  width: 35vw;
+  height: 35vw;
+  max-width: 140px;
+  max-height: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 可选：显示分光镜对齐框 */
+.clock-wrapper::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(0, 255, 255, 0.15);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.clock {
+  text-align: center;
+  padding: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.time {
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: 2px;
+  color: #00ffff;
+  text-shadow: 
+    0 0 5px #00ffff,
+    0 0 10px #00ffff,
+    0 0 20px #00ffff,
+    0 0 40px #0088ff;
+  font-variant-numeric: tabular-nums;
+}
+
+.date {
+  font-size: 8px;
+  color: #00ffff;
+  opacity: 0.8;
+  margin-top: 6px;
+  letter-spacing: 1px;
+  text-shadow: 
+    0 0 3px #00ffff,
+    0 0 6px #00ffff;
+}
+
+/* 发光背景效果 */
+.glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(
+    circle,
+    rgba(0, 255, 255, 0.12) 0%,
+    rgba(0, 255, 255, 0.04) 50%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+  animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0.6;
+  }
+}
+
+/* 扫描线效果 - 增加科技感 */
+.hologram-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 255, 0.015) 2px,
+    rgba(0, 255, 255, 0.015) 4px
+  );
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* 闪烁动画 - 模拟全息效果 */
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  95% { opacity: 0.9; }
+  96% { opacity: 1; }
+}
+
+.clock {
+  animation: flicker 8s infinite;
+}
+
+/* iPhone 12 及类似设备优化 */
+@media (max-width: 430px) {
+  .clock-wrapper {
+    width: 35vw;
+    height: 35vw;
+  }
+  
+  .time {
+    font-size: 24px;
+    letter-spacing: 1px;
+  }
+  
+  .date {
+    font-size: 7px;
+    letter-spacing: 0.5px;
+  }
+  
+  .glow {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+/* 防止选中 */
+* {
+  user-select: none;
+  -webkit-user-select: none;
+}
