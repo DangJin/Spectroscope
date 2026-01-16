@@ -276,190 +276,13 @@ body {
   height: 100%;
 }
 
-/* ==================== 场景4: 旋转地球 ==================== */
-.earth-container {
-  width: 80px;
-  height: 80px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.earth {
-  position: relative;
-  width: 60px;
-  height: 60px;
-}
-
-.earth-globe {
-  position: absolute;
+/* ==================== 场景4: 极光 ==================== */
+#aurora-canvas {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
-  background: 
-    radial-gradient(circle at 35% 35%, rgba(0, 255, 255, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, #0d3d4d 0%, #051a20 100%);
-  box-shadow: 
-    inset -10px -10px 30px rgba(0, 0, 0, 0.8),
-    inset 8px 8px 20px rgba(0, 255, 255, 0.1),
-    0 0 25px rgba(0, 255, 255, 0.7),
-    0 0 50px rgba(0, 255, 255, 0.4);
-  overflow: hidden;
 }
 
-/* 经纬网格 */
-.earth-globe::before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 1.5px solid rgba(0, 255, 255, 0.5);
-  background: 
-    linear-gradient(0deg, transparent 48%, rgba(0, 255, 255, 0.4) 49%, rgba(0, 255, 255, 0.4) 51%, transparent 52%),
-    linear-gradient(90deg, transparent 48%, rgba(0, 255, 255, 0.4) 49%, rgba(0, 255, 255, 0.4) 51%, transparent 52%),
-    linear-gradient(0deg, transparent 23%, rgba(0, 255, 255, 0.2) 24%, rgba(0, 255, 255, 0.2) 25%, transparent 26%),
-    linear-gradient(0deg, transparent 73%, rgba(0, 255, 255, 0.2) 74%, rgba(0, 255, 255, 0.2) 75%, transparent 76%);
-}
-
-/* 大陆光点 */
-.earth-globe::after {
-  content: '';
-  position: absolute;
-  width: 8px;
-  height: 6px;
-  background: rgba(0, 255, 255, 0.8);
-  border-radius: 50%;
-  top: 18px;
-  left: 15px;
-  box-shadow: 
-    15px 5px 0 -1px rgba(0, 255, 255, 0.6),
-    8px 20px 0 0 rgba(0, 255, 255, 0.7),
-    25px 18px 0 -2px rgba(0, 255, 255, 0.5),
-    -2px 25px 0 1px rgba(0, 255, 255, 0.4);
-  animation: landBlink 3s ease-in-out infinite;
-}
-
-@keyframes landBlink {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
-}
-
-/* 扫描环 */
-.earth-ring {
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  border-top-color: rgba(0, 255, 255, 0.9);
-  border-right-color: rgba(0, 255, 255, 0.3);
-  animation: scanRing 3s linear infinite;
-  filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.8));
-}
-
-@keyframes scanRing {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* ==================== 场景5: 音乐波形 ==================== */
-.music-container {
-  width: 80px;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.music-bars {
-  position: relative;
-  width: 70px;
-  height: 70px;
-}
-
-.bar {
-  position: absolute;
-  left: 50%;
-  bottom: 50%;
-  width: 3px;
-  background: linear-gradient(to top, #00ffff, #00ff88);
-  border-radius: 2px;
-  transform-origin: bottom center;
-  box-shadow: 
-    0 0 8px rgba(0, 255, 255, 0.9),
-    0 0 15px rgba(0, 255, 255, 0.6);
-}
-
-.bar:nth-child(1) { transform: translateX(-50%) rotate(0deg); animation: barPulse1 0.6s ease-in-out infinite; }
-.bar:nth-child(2) { transform: translateX(-50%) rotate(40deg); animation: barPulse2 0.7s ease-in-out infinite; }
-.bar:nth-child(3) { transform: translateX(-50%) rotate(80deg); animation: barPulse3 0.5s ease-in-out infinite; }
-.bar:nth-child(4) { transform: translateX(-50%) rotate(120deg); animation: barPulse1 0.8s ease-in-out infinite; }
-.bar:nth-child(5) { transform: translateX(-50%) rotate(160deg); animation: barPulse2 0.55s ease-in-out infinite; }
-.bar:nth-child(6) { transform: translateX(-50%) rotate(200deg); animation: barPulse3 0.65s ease-in-out infinite; }
-.bar:nth-child(7) { transform: translateX(-50%) rotate(240deg); animation: barPulse1 0.75s ease-in-out infinite; }
-.bar:nth-child(8) { transform: translateX(-50%) rotate(280deg); animation: barPulse2 0.5s ease-in-out infinite; }
-.bar:nth-child(9) { transform: translateX(-50%) rotate(320deg); animation: barPulse3 0.7s ease-in-out infinite; }
-
-@keyframes barPulse1 {
-  0%, 100% { height: 12px; background: linear-gradient(to top, #00ffff, #00ff88); }
-  50% { height: 32px; background: linear-gradient(to top, #ff00ff, #ff6b6b); }
-}
-
-@keyframes barPulse2 {
-  0%, 100% { height: 18px; background: linear-gradient(to top, #00ff88, #ffff00); }
-  50% { height: 28px; background: linear-gradient(to top, #00ffff, #ff00ff); }
-}
-
-@keyframes barPulse3 {
-  0%, 100% { height: 15px; background: linear-gradient(to top, #ff00ff, #00ffff); }
-  50% { height: 35px; background: linear-gradient(to top, #ffff00, #00ff88); }
-}
-
-/* 中心圆环 */
-.music-bars::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba(0, 255, 255, 0.6);
-  border-radius: 50%;
-  animation: centerPulse 1s ease-in-out infinite;
-  box-shadow: 
-    0 0 10px rgba(0, 255, 255, 0.5),
-    inset 0 0 10px rgba(0, 255, 255, 0.3);
-}
-
-@keyframes centerPulse {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.7; }
-}
-
-/* 外圈光环 */
-.music-bars::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 65px;
-  height: 65px;
-  border: 1px solid rgba(0, 255, 255, 0.2);
-  border-radius: 50%;
-  animation: outerRing 2s linear infinite;
-}
-
-@keyframes outerRing {
-  0% { transform: translate(-50%, -50%) rotate(0deg); border-color: rgba(0, 255, 255, 0.3); }
-  50% { border-color: rgba(255, 0, 255, 0.3); }
-  100% { transform: translate(-50%, -50%) rotate(360deg); border-color: rgba(0, 255, 255, 0.3); }
-}
-
-/* ==================== 场景6: 发光水母 ==================== */
+/* ==================== 场景5: 发光水母 ==================== */
 .jellyfish-container {
   width: 70px;
   height: 80px;
@@ -650,27 +473,14 @@ body {
   }
   
   .control-btn {
-    width: 34px;
-    height: 34px;
-    font-size: 16px;
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
   }
   
   .controls {
-    gap: 6px;
-    padding: 6px 12px;
-  }
-  
-  .earth-globe {
-    width: 45px;
-    height: 45px;
-  }
-  
-  .earth-ring {
-    width: 60px;
-  }
-  
-  .bar {
-    width: 4px;
+    gap: 10px;
+    padding: 8px 15px;
   }
   
   .jellyfish-head {

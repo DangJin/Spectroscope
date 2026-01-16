@@ -183,6 +183,125 @@ function stopFirework() {
   }
 }
 
+// ==================== 极光功能（Aurora 极地极光） ====================
+let auroraCanvas, auroraCtx;
+let auroraAnimationId;
+let auroraTime = 0;
+
+function initAurora() {
+  auroraCanvas = document.getElementById('aurora-canvas');
+  const rect = auroraCanvas.parentElement.getBoundingClientRect();
+  auroraCanvas.width = rect.width || 140;
+  auroraCanvas.height = rect.height || 140;
+  auroraCtx = auroraCanvas.getContext('2d');
+}
+
+function drawAurora() {
+  if (!auroraCtx) return;
+  
+  const w = auroraCanvas.width;
+  const h = auroraCanvas.height;
+  
+  // 清空画布
+  auroraCtx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+  auroraCtx.fillRect(0, 0, w, h);
+  
+  // 绘制多层极光帷幕
+  const curtainCount = 3;
+  
+  for (let c = 0; c < curtainCount; c++) {
+    auroraCtx.beginPath();
+    
+    // 从底部开始
+    auroraCtx.moveTo(0, h);
+    
+    // 绘制波浪状的顶部边缘
+    const points = [];
+    for (let x = 0; x <= w; x += 2) {
+      // 多层波浪叠加，模拟极光的飘动
+      const wave1 = Math.sin(x * 0.08 + auroraTime * 0.02 + c) * 8;
+      const wave2 = Math.sin(x * 0.12 + auroraTime * 0.015 + c * 2) * 5;
+      const wave3 = Math.sin(x * 0.05 + auroraTime * 0.025 + c * 0.5) * 10;
+      
+      // 极光高度变化
+      const heightVar = Math.sin(x * 0.03 + auroraTime * 0.01 + c * 3) * 15;
+      const baseHeight = h * (0.25 + c * 0.12);
+      const y = baseHeight + wave1 + wave2 + wave3 + heightVar;
+      
+      points.push({ x, y });
+      auroraCtx.lineTo(x, y);
+    }
+    
+    // 闭合路径
+    auroraCtx.lineTo(w, h);
+    auroraCtx.closePath();
+    
+    // 创建垂直渐变 - 从底部向上渐变消失
+    const gradient = auroraCtx.createLinearGradient(0, h, 0, 0);
+    
+    // 极光颜色：绿色为主，带有蓝色和紫色
+    const hueShift = Math.sin(auroraTime * 0.01 + c) * 15;
+    const baseHue = 120 + c * 25 + hueShift; // 绿色到青色
+    const alpha = 0.25 - c * 0.05;
+    
+    gradient.addColorStop(0, 'transparent');
+    gradient.addColorStop(0.1, `hsla(${baseHue}, 100%, 45%, ${alpha})`);
+    gradient.addColorStop(0.3, `hsla(${baseHue + 10}, 100%, 55%, ${alpha * 1.2})`);
+    gradient.addColorStop(0.5, `hsla(${baseHue + 20}, 100%, 50%, ${alpha * 0.8})`);
+    gradient.addColorStop(0.7, `hsla(${baseHue + 40}, 80%, 45%, ${alpha * 0.4})`);
+    gradient.addColorStop(1, 'transparent');
+    
+    auroraCtx.fillStyle = gradient;
+    auroraCtx.fill();
+    
+    // 添加顶部边缘的亮线
+    auroraCtx.beginPath();
+    auroraCtx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) {
+      auroraCtx.lineTo(points[i].x, points[i].y);
+    }
+    auroraCtx.strokeStyle = `hsla(${baseHue + 10}, 100%, 70%, ${alpha * 1.5})`;
+    auroraCtx.lineWidth = 1.5;
+    auroraCtx.shadowBlur = 10;
+    auroraCtx.shadowColor = `hsla(${baseHue}, 100%, 60%, 0.6)`;
+    auroraCtx.stroke();
+  }
+  
+  // 添加一些闪烁的星星
+  auroraCtx.shadowBlur = 0;
+  for (let i = 0; i < 2; i++) {
+    if (Math.random() < 0.15) {
+      const x = Math.random() * w;
+      const y = Math.random() * h * 0.4;
+      const size = Math.random() * 1.2 + 0.3;
+      
+      auroraCtx.beginPath();
+      auroraCtx.arc(x, y, size, 0, Math.PI * 2);
+      auroraCtx.fillStyle = `rgba(255, 255, 255, ${Math.random() * 0.6 + 0.3})`;
+      auroraCtx.fill();
+    }
+  }
+  
+  auroraTime++;
+  auroraAnimationId = requestAnimationFrame(drawAurora);
+}
+
+function startAurora() {
+  if (!auroraCanvas) initAurora();
+  auroraTime = 0;
+  drawAurora();
+}
+
+function stopAurora() {
+  if (auroraAnimationId) {
+    cancelAnimationFrame(auroraAnimationId);
+    auroraAnimationId = null;
+  }
+  if (auroraCtx) {
+    auroraCtx.clearRect(0, 0, auroraCanvas.width, auroraCanvas.height);
+  }
+}
+
 // ==================== 场景切换 ====================
 let currentScene = 'clock';
 
@@ -194,9 +313,12 @@ function switchScene(sceneName) {
     scene.classList.remove('active');
   });
   
-  // 停止烟花动画
+  // 停止动画
   if (currentScene === 'firework') {
     stopFirework();
+  }
+  if (currentScene === 'aurora') {
+    stopAurora();
   }
   
   // 显示新场景
@@ -205,9 +327,12 @@ function switchScene(sceneName) {
     newScene.classList.add('active');
   }
   
-  // 启动烟花动画
+  // 启动动画
   if (sceneName === 'firework') {
     setTimeout(startFirework, 100);
+  }
+  if (sceneName === 'aurora') {
+    setTimeout(startAurora, 100);
   }
   
   // 更新按钮状态
@@ -239,8 +364,9 @@ function init() {
   updateClock();
   setInterval(updateClock, 1000);
   
-  // 烟花画布初始化
+  // 画布初始化
   initFirework();
+  initAurora();
   
   // 场景切换按钮
   document.querySelectorAll('.control-btn').forEach(btn => {
